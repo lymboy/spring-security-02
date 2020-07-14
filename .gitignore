@@ -1,0 +1,5 @@
+# Project exclude paths
+/spring-security-app/target/
+/spring-security-browser/target/
+/spring-security-core/target/
+/spring-security-demo/target/
