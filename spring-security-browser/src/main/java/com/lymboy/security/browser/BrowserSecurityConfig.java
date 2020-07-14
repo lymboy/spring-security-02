@@ -1,12 +1,14 @@
 package com.lymboy.security.browser;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import com.lymboy.security.core.properties.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.annotation.Resource;
 
 /**
  * <p>浏览器安全配置类</p>
@@ -18,18 +20,23 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class BrowserSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Resource
+    private SecurityProperties securityProperties;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.formLogin()
-                .loginPage("/sign-in.html")
+                .loginPage("/authentication/require")
                 .loginProcessingUrl("/authentication/form")
-                .permitAll()
-//        http.httpBasic()
                 .and()
-                .csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/authentication/require",
+                        securityProperties.getBrowser().getLoginPage())
+                .permitAll()
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .csrf().disable();
     }
 
     @Bean
