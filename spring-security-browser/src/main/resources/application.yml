@@ -1,0 +1,4 @@
+lymboy:
+  security:
+    browser:
+      loginPage: /sign-in.html
